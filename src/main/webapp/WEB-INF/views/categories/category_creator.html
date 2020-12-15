@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create new category</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/style.css}" />
+</head>
+<body>
+<script th:src="@{/assets/js/script.js}"></script>
+    <table>
+        <tr>
+            <td>
+                <a href="/"><button>Main page</button></a>
+            </td>
+        </tr>
+        <form onsubmit="return saveCategory()" th:method="POST" th:action="@{/category/create}" th:object="${category}">
+            <tr>
+                <td>
+                   <label for="categoryName">Category Name</label>
+                </td>
+                <td>
+                    <input type="text" th:field="*{name}" id="categoryName" required class="text-field-class">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="parentCategory">Parent category</label>
+                </td>
+                <td>
+                    <select id="parentCategory" name="parentCategoryId"  class="text-field-class">
+                        <option value=""></option>
+                        <option th:each="category : ${categories}" th:value="${category.getId()}" th:text="${category.name}"></option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="parameters">Parameters</label>
+                </td>
+                <td>
+                    <select id="parameters" name="parameterId"  class="text-field-class">
+                        <option value=""></option>
+                        <option th:each="parameter : ${parameters}" th:value="${parameter.getId()}" th:text="${parameter.name}"></option>
+                    </select>
+                </td>
+            </tr>
+
+           <tr>
+               <td>
+                   <input type="submit" value="Create category">
+               </td>
+           </tr>
+
+        </form>
+        <tr>
+            <td>
+                <a href="/parameter/new"><button>Create new parameter</button></a>
+            </td>
+        </tr>
+
+    </table>
+</body>
+</html>

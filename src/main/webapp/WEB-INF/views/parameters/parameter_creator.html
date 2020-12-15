@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create new parameter</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/style.css}" />
+</head>
+<body>
+<script th:src="@{/assets/js/script.js}"></script>
+<table>
+    <tr>
+        <td>
+            <a href="/"><button>Main page</button></a>
+        </td>
+    </tr>
+    <form onsubmit="return saveParameter()" th:method="POST" th:action="@{/parameter/create}" th:object="${parameter}">
+        <tr>
+            <td>
+                <label for="parameterName">Parameter Name</label>
+            </td>
+            <td>
+                <input type="text" th:field="*{name}" id="parameterName" required class="text-field-class">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="parameterType">Parameter Type</label>
+            </td>
+            <td>
+                <select id="parameterType" name="type">
+                    <option value="text">Text</option>
+                    <option value="number">Number</option>
+                    <option value="logic">Logic</option>
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <input type="submit" value="Create parameter">
+            </td>
+        </tr>
+
+    </form>
+
+</table>
+
+</table>
+</body>
+</html>

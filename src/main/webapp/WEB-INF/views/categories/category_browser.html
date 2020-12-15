@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <a href="/category/new"><button>Create category</button></a>
+
+    <table class="emp_table">
+        <tr>
+            <th>Category name</th>
+            <th>Parent category</th>
+            <th>Parameters</th>
+            <th>Action</th>
+        </tr>
+
+        <tr th:if="${categories.empty}">
+            <td colspan="4" style="text-align: center">No category</td>
+        </tr>
+        <tr th:each="category : ${categories}">
+            <td><p th:text="${category.name}"></p></td>
+            <td><p th:text="${category?.parentCategory?.name}"></p></td>
+            <td>
+                <span th:each="parameter : ${category.getParameters()}">
+                <p th:text="${parameter.getName()}"></p>
+                </span>
+            </td>
+            <td><a th:href="@{/category/edit/{id}(id=${category.getId()})}">edit</a>/
+                <a th:href="@{/category/remove/{id}(id=${category.getId()})}" onclick="return confirm('Are you sure?')">remove</a></td>
+        </tr>
+    </table>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Registration</title>
+        <script ENGINE="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    </head>
+    <body>
+        <script th:src="@{/assets/js/completeUserRegistration.js}"></script>
+
+    <!--th:method="POST" th:action="@{/users/register}"-->
+
+        <H1>Registration new user</H1>
+        <form id="registerForm" name="registerForm" action="/" onsubmit="registerUser()">
+
+            <table>
+
+                <tr>
+                    <td><label for="surname">Surname</label>                          </td>
+                    <td><input type="text" id="surname" name="surname">               </td>
+                </tr>
+
+                <br>
+
+                <tr>
+                    <td><label for="name">First name</label>                          </td>
+                    <td><input type="text" id="name" name="name">                     </td>
+                </tr>
+
+                <br>
+
+                <tr>
+                    <td><label for="username">Username</label>                        </td>
+                    <td><input type="text" id="userName" name="userName">             </td>
+                </tr>
+
+                <br>
+
+                <tr>
+                    <td><label for="password">Password</label>                        </td>
+                    <td><input type="password" id="password" name="password">         </td>
+                </tr>
+
+                <br>
+
+                <tr>
+                    <td><label for="passwordConfirm">Confirm password</label>          </td>
+                    <td><input type="password" id="passwordConfirm">                   </td>
+                </tr>
+
+                <br>
+
+                <tr>
+                    <td><label for="email">Email</label>                               </td>
+                    <td><input type="email" id="email" name="email">                   </td>
+                </tr>
+
+                <br>
+
+                <tr>
+                    <td><label for="phoneNumber">Phonenumber</label>                   </td>
+                    <td><input type="number" id="phoneNumber" name="phoneNumber">      </td>
+                </tr>
+
+                <br>
+
+                <tr>
+                    <td colspan="2"><input type="submit" value="Complete registration"></td>
+                </tr>
+
+            </table>
+        </form>
+    </body>
+</html>

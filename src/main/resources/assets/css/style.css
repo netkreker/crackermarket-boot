@@ -1,0 +1,55 @@
+* {
+    box-sizing: border-box;
+    padding: 0px;
+    margin: 0px;
+}
+
+table {
+    margin: 10px;
+}
+
+th {
+    padding: 3px;
+}
+
+td {
+    padding: 3px;
+}
+
+.text-field-class{
+    width: 200px;
+}
+
+.emp_table {
+    border: 1px solid grey;
+    border-color: brown;
+    margin: 10px;
+}
+
+.emp_table th {
+    border: 1px solid grey;
+    border-color: brown;
+    padding: 3px;
+}
+
+.emp_table td {
+    border: 1px solid grey;
+    border-color: brown;
+    padding: 3px;
+}
+
+.form {
+    display: block;
+    margin: 10px;
+}
+
+.form_el {
+    display: inline-block;
+    margin: 10px;
+    vertical-align: top;
+
+}
+
+.submit_btn{
+    width: 130px;
+}
