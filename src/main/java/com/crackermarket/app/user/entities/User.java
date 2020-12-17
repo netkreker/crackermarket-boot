@@ -26,30 +26,16 @@ public class User extends BaseEntity {
     @Column(name = "PHONE_NUMBER")
     private String phoneNumber;
 
+
+
     @Column(name = "ACCESS_LEVEL")
     @Enumerated(EnumType.STRING)
     private LevelAccess access;
 
     public LevelAccess getAccess() {return access; }
 
-    public void setAccess(String access) {
-        switch(access){
-            case "customer":{
-                this.access = LevelAccess.CUSTOMER;
-                break;
-            }
-            case "seller":{
-                this.access = LevelAccess.SELLER;
-                break;
-            }
-            case "admin": {
-                this.access = LevelAccess.ADMIN;
-                break;
-            }
-            default:{
-                this.access = LevelAccess.UNKNOWN;
-            }
-        }
+    public void setAccess(LevelAccess access) {
+        this.access = access;
     }
 
     public String getUserName() { return userName; }
