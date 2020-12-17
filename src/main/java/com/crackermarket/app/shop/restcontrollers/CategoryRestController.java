@@ -66,7 +66,7 @@ public class CategoryRestController {
         Category category = categoryService.findById(id);
         if(category != null) {
             logger.info(HttpStatus.FOUND);
-            return new ResponseEntity<>(category, httpHeaders,HttpStatus.OK);
+            return new ResponseEntity<>(category, httpHeaders,HttpStatus.FOUND);
         } else {
             logger.error(HttpStatus.BAD_REQUEST);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

@@ -1,12 +1,7 @@
 package com.crackermarket.app.shop.restcontrollers;
 
-package com.crackermarket.app.shop.restcontrollers;
-
 import com.crackermarket.app.shop.entities.Category;
 import com.crackermarket.app.shop.services.CategoryService;
-import com.crackermarket.app.user.entities.User;
-import com.crackermarket.app.user.enumerations.LevelAccess;
-import com.crackermarket.app.user.services.UserService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
@@ -35,17 +30,17 @@ import java.util.UUID;
 class CategoryRestControllerTest {
 
     @Autowired
-    public MockMvc mockMvc;                     // MVC
+    public MockMvc mockMvc;                         // MVC
 
     @Mock
-    private CategoryService categoryService;            // Mock service with dummy methods
+    private CategoryService categoryService;        // Mock service with dummy methods
 
     @Autowired
     private CategoryService databaseService;        // Service with db connection
 
-    private ObjectMapper mapper;                // For converting from object to JSON and vice versa
+    private ObjectMapper mapper;                    // For converting from object to JSON and vice versa
 
-    private List<Category> testDataCategory;                   // Test array of users
+    private List<Category> testDataCategory;        // Test array of users
 
 
     @BeforeEach
@@ -120,7 +115,7 @@ class CategoryRestControllerTest {
 
 
     @Test
-    void showAllUsers() throws Exception {
+    void showAllCategories() throws Exception {
 
         // Get test users data
         List<Category> result = categoryService.findAll();
@@ -148,7 +143,7 @@ class CategoryRestControllerTest {
     }
 
     @Test
-    void getUserById() throws Exception {
+    void getCategoryById() throws Exception {
 
         Category testCategory = categoryService.findById(UUID.randomUUID().toString());
 
@@ -162,7 +157,7 @@ class CategoryRestControllerTest {
     }
 
     @Test
-    void updateUser() throws Exception {
+    void updateCategory() throws Exception {
         Category testCategory = categoryService.findById(UUID.randomUUID().toString());
 
         testCategory.setName("NewCategory");
@@ -170,7 +165,7 @@ class CategoryRestControllerTest {
         String testJson = mapper.writeValueAsString(testCategory);
 
         ResultActions resultActions = mockMvc.perform(
-                MockMvcRequestBuilders.put("/category/update/" + testUser.getId())
+                MockMvcRequestBuilders.patch("/category/update/")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(testJson))
                 .andExpect(MockMvcResultMatchers.status().isOk())
