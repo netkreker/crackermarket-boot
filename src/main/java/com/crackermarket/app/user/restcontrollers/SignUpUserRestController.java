@@ -46,31 +46,26 @@ public class SignUpUserRestController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
-        List<UUID> usersId = new ArrayList<>();
-
-        for (User user: users)
-            usersId.add(user.getId());
-
         LogEntity log = new LogEntity(LogEntityType.INFO, this.getClass(), "showAllUsers", HttpStatus.FOUND, "Users found", null);
         logService.save(log);
-        return new ResponseEntity<>(usersId, HttpStatus.FOUND);
+        return new ResponseEntity<>(users, HttpStatus.FOUND);
     }
 
-    @RequestMapping(value = "/{username}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getUserById(@PathVariable String username){
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getUserById(@PathVariable String id){
 
         User user = null;
-        user = userService.findUserByUserName(username);
+        user = userService.findUserById(UUID.fromString(id));
 
         if (user == null) {
-            LogEntity log = new LogEntity(LogEntityType.ERROR, this.getClass(), "getUserById", HttpStatus.NOT_FOUND, "User with username \'" + username + "\' not found", null);
+            LogEntity log = new LogEntity(LogEntityType.ERROR, this.getClass(), "getUserById", HttpStatus.NOT_FOUND, "User with id \'" + id + "\' not found", null);
             logService.save(log);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         LogEntity log = new LogEntity(LogEntityType.INFO, this.getClass(), "getUserById", HttpStatus.FOUND, "User with id \'" + user.getId() + "\' found", null);
         logService.save(log);
-        return new ResponseEntity<>(user.getId(), HttpStatus.FOUND);
+        return new ResponseEntity<>(user, HttpStatus.FOUND);
     }
 
     // Creator
@@ -89,7 +84,7 @@ public class SignUpUserRestController {
         LogEntity log = new LogEntity(LogEntityType.INFO, this.getClass(), "createUser", HttpStatus.CREATED, "User with id \'"
                 + user.getId() + "\' was created", null);
         logService.save(log);
-        return new ResponseEntity<>(user.getId(), HttpStatus.CREATED);
+        return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
     // Put
@@ -127,16 +122,17 @@ public class SignUpUserRestController {
             return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
         }
 
+        newUser.setId(UUID.fromString(id));
         userService.updateUser(newUser);
 
         LogEntity log = new LogEntity(LogEntityType.INFO, this.getClass(), "updateUser", HttpStatus.OK, "User with id \'" + id + "\' was updated", null);
         logService.save(log);
-        return new ResponseEntity<>(newUser.getId(), HttpStatus.OK);
+        return new ResponseEntity<>(newUser, HttpStatus.OK);
 
     }
 
     // Delete
-    @RequestMapping(value = "/{id}/delete", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteUser(@PathVariable(name="id") String id){
 
         try{
@@ -161,7 +157,7 @@ public class SignUpUserRestController {
 
         LogEntity log = new LogEntity(LogEntityType.INFO, this.getClass(), "deleteUser", HttpStatus.OK, "User with id \'" + id + "\' was deleted", null);
         logService.save(log);
-        return new ResponseEntity<>(user.getId(), HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
