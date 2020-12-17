@@ -40,6 +40,7 @@ public class CrackermarketApplicationTests {
 	public void saveNewCategory() throws Exception {
 		Category category = new Category();
 		category.setName("Main category");
+
 		categoryDAO.save(category);
 
 	}

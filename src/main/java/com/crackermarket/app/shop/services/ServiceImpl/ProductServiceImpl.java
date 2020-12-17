@@ -29,8 +29,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product findById(UUID id) {
-        return productDAO.findById(id);
+    public Product findById(String id) {
+        return productDAO.findById(UUID.fromString(id));
     }
 
     @Override
@@ -44,7 +44,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void delete(Product product) {
-        productDAO.delete(product);
+    public void delete(String id) {
+        productDAO.delete(productDAO.findById(UUID.fromString(id)));
+    }
+
+    @Override
+    public void update(Product product) {
+        productDAO.update(product);
     }
 }

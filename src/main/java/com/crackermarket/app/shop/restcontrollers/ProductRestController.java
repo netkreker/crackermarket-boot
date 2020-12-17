@@ -1,11 +1,13 @@
 package com.crackermarket.app.shop.restcontrollers;
 
+
 import com.crackermarket.app.core.LogEntity;
 import com.crackermarket.app.core.LogEntityType;
 import com.crackermarket.app.core.services.LogEntityService;
 import com.crackermarket.app.shop.entities.Category;
+import com.crackermarket.app.shop.entities.Product;
 import com.crackermarket.app.shop.services.CategoryService;
-import com.sun.javafx.geom.BaseBounds;
+import com.crackermarket.app.shop.services.ProductService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -19,54 +21,47 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("category")
-public class CategoryRestController {
+@RequestMapping("/product")
+public class ProductRestController {
     @Autowired
-    private CategoryService categoryService;
+    private ProductService productService;
     @Autowired
     private LogEntityService logService;
 
     Logger logger = Logger.getLogger(CategoryRestController.class);
 
     @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Category>> showAllCategories() {
+    public ResponseEntity<List<Product>> showAllProducts() {
 
-        List<Category> categories = categoryService.findAll();
-        if(categories.isEmpty()) {
-            LogEntity log = new LogEntity(LogEntityType.ERROR, this.getClass(), "showAllCategories", HttpStatus.NO_CONTENT, "Categories not found", null);
+        List<Product> products = productService.findAll();
+        if(products.isEmpty()) {
+            LogEntity log = new LogEntity(LogEntityType.ERROR, this.getClass(), "showAllProducts", HttpStatus.NO_CONTENT, "Products not found", null);
             logService.save(log);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            LogEntity log = new LogEntity(LogEntityType.INFO, this.getClass(), "showAllCategories", HttpStatus.FOUND, "Categories found", null);
-            logService.save(log);
-            return new ResponseEntity<>(categories, HttpStatus.FOUND);
+            return new ResponseEntity<>(products, HttpStatus.FOUND);
         }
     }
 
     @RequestMapping(value = "/new", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createCategory(@RequestBody Category category) {
+    public ResponseEntity<Product> createCategory(@RequestBody Product product) {
         HttpHeaders httpHeaders = new HttpHeaders();
-        System.out.println(category);
-        if(category.getName() != null && !"".equals(category.getName())) {
-            categoryService.save(category);
-            LogEntity log = new LogEntity(LogEntityType.INFO, this.getClass(), "saveCategory", HttpStatus.CREATED, "Category with was created", null);
-            logService.save(log);
-            return new ResponseEntity<>(category, httpHeaders, HttpStatus.CREATED);
+        if(product.getName() != null && !"".equals(product.getName())) {
+            productService.save(product);
+            return new ResponseEntity<>(product, httpHeaders, HttpStatus.CREATED);
         } else {
-            logger.error(HttpStatus.BAD_REQUEST);
-            Map<String, String> map = new HashMap<>();
-            map.put("ErrorMEssage", "Message");
-            return new ResponseEntity<>(map,HttpStatus.BAD_REQUEST);
+            LogEntity log = new LogEntity(LogEntityType.ERROR, this.getClass(), "createCategory", HttpStatus.NO_CONTENT, "Product not saved", null);
+            logService.save(log);
+            return new ResponseEntity<>(httpHeaders, HttpStatus.BAD_REQUEST);
         }
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Category> findCategory(@PathVariable String id){
+    public ResponseEntity<Product> findProduct(@PathVariable String id){
         HttpHeaders httpHeaders = new HttpHeaders();
-        Category category = categoryService.findById(id);
-        if(category != null) {
-            logger.info(HttpStatus.FOUND);
-            return new ResponseEntity<>(category, httpHeaders,HttpStatus.OK);
+        Product product = productService.findById(id);
+        if(product != null) {
+            return new ResponseEntity<>(product, httpHeaders,HttpStatus.OK);
         } else {
             logger.error(HttpStatus.BAD_REQUEST);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -75,12 +70,11 @@ public class CategoryRestController {
 
 
     @RequestMapping(value = "/update", method = RequestMethod.PATCH, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Category> updateCategory(@RequestBody Category category) {
+    public ResponseEntity<Product> updateCategory(@RequestBody Product product) {
         HttpHeaders httpHeaders = new HttpHeaders();
-        if(category.getId() != null && category.getName() != null) {
-            categoryService.update(category);
-            logger.info(HttpStatus.OK);
-            return new ResponseEntity<>(category, httpHeaders, HttpStatus.OK);
+        if(product.getId() != null && product.getName() != null) {
+            productService.update(product);
+            return new ResponseEntity<>(product, httpHeaders, HttpStatus.OK);
         } else {
             logger.error(HttpStatus.BAD_REQUEST);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -88,11 +82,10 @@ public class CategoryRestController {
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Category> deleteCategory(@PathVariable String id) {
+    public ResponseEntity<?> deleteCategory(@PathVariable String id) {
         HttpHeaders httpHeaders = new HttpHeaders();
         if(id != null && !"".equals(id)) {
-            categoryService.delete(id);
-            logger.info(HttpStatus.OK);
+            productService.delete(id);
             return new ResponseEntity<>(httpHeaders, HttpStatus.OK);
         } else {
             logger.error(HttpStatus.BAD_REQUEST);
