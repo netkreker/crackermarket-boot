@@ -21,6 +21,8 @@ import java.util.UUID;
 @RestController
 public class OrderRestController {
 
+    private static final int RESULTS_IN_PAGE = 3;
+
     @Autowired
     private OrderService orderService;
 
@@ -63,14 +65,14 @@ public class OrderRestController {
 
         LogEntity log = new LogEntity(LogEntityType.INFO, this.getClass(), "createNewOrder", HttpStatus.CREATED, "Order with id \'" + order.getId() + "\' created", null);
         logService.save(log);
-        return new ResponseEntity<>(order.getId(), HttpStatus.CREATED);
+        return new ResponseEntity<>(order, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/orders/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getAllOrders(){
+    @RequestMapping(value = "/orders/all/{page}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAllOrders(@PathVariable(name="page") String page){
 
         List<Order> orders = null;
-        orders = orderService.findAllOrders();
+        orders = orderService.findAllOrders(Integer.parseInt(page), RESULTS_IN_PAGE);
 
         if (orders == null || orders.isEmpty()){
             LogEntity log = new LogEntity(LogEntityType.ERROR, this.getClass(), "getAllOrders", HttpStatus.NO_CONTENT, "Orders not found", null);
@@ -78,17 +80,13 @@ public class OrderRestController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
-        List<UUID> ordersId = new ArrayList<>();
-        for (Order order : orders)
-            ordersId.add(order.getId());
-
         LogEntity log = new LogEntity(LogEntityType.INFO, this.getClass(), "getAllOrders", HttpStatus.FOUND, "Orders found", null);
         logService.save(log);
-        return new ResponseEntity<>(ordersId, HttpStatus.FOUND);
+        return new ResponseEntity<>(orders, HttpStatus.FOUND);
     }
 
-    @RequestMapping(value = "/users/{id}/orders/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getUserOrders(@PathVariable(name="id") String id){
+    @RequestMapping(value = "/users/{id}/orders/all/{page}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getUserOrders(@PathVariable(name="id") String id, @PathVariable(name = "page") String page){
 
         try{
             UUID.fromString(id);
@@ -109,7 +107,7 @@ public class OrderRestController {
         }
 
         List<Order> orders = null;
-        orders = orderService.findUserOrders(UUID.fromString(id));
+        orders = orderService.findUserOrders(UUID.fromString(id), Integer.parseInt(page), RESULTS_IN_PAGE);
 
         if (orders == null || orders.isEmpty()){
             LogEntity log = new LogEntity(LogEntityType.ERROR, this.getClass(), "getUserOrders", HttpStatus.NOT_FOUND, "Orders for user with id \'" + id + "\' not found", null);
@@ -117,13 +115,9 @@ public class OrderRestController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        List<UUID> ordersId = new ArrayList<>();
-        for (Order order : orders)
-            ordersId.add(order.getId());
-
         LogEntity log = new LogEntity(LogEntityType.INFO, this.getClass(), "getUserOrders", HttpStatus.NOT_FOUND, "Orders for user with id \'" + id + "\' found", null);
         logService.save(log);
-        return new ResponseEntity<>(ordersId, HttpStatus.FOUND);
+        return new ResponseEntity<>(orders, HttpStatus.FOUND);
 
     }
 
@@ -150,7 +144,7 @@ public class OrderRestController {
 
         LogEntity log = new LogEntity(LogEntityType.INFO, this.getClass(), "findOrderById", HttpStatus.NOT_FOUND, "Order with id \'" + id + "\' found", null);
         logService.save(log);
-        return new ResponseEntity<>(order.getId(), HttpStatus.FOUND);
+        return new ResponseEntity<>(order, HttpStatus.FOUND);
 
     }
 
@@ -191,7 +185,7 @@ public class OrderRestController {
 
         LogEntity log = new LogEntity(LogEntityType.INFO, this.getClass(), "updateOrderById", HttpStatus.OK, "Order with id \'" + id + "\' modified", null);
         logService.save(log);
-        return new ResponseEntity<>(updatedOrder.getId(), HttpStatus.OK);
+        return new ResponseEntity<>(updatedOrder, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/order/{id}/delete", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -219,7 +213,7 @@ public class OrderRestController {
 
         LogEntity log = new LogEntity(LogEntityType.INFO, this.getClass(), "deleteOrderById", HttpStatus.OK, "Order with id \'" + id + "\' deleted", null);
         logService.save(log);
-        return new ResponseEntity<>(order.getId(), HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 }

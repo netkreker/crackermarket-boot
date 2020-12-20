@@ -29,33 +29,33 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public List<Address> findAllAddresses() {
-        return addressDAO.findAllAddresses();
+    public List<Address> findAllAddresses(int page, int resultsInPage) {
+        return addressDAO.findAllAddresses(page, resultsInPage);
     }
 
     @Override
-    public List<Address> findAllUserAddresses(UUID user_id) {
-        return addressDAO.findAllUserAddresses(user_id);
+    public List<Address> findAllUserAddresses(UUID user_id, int page, int resultsInPage) {
+        return addressDAO.findAllUserAddresses(user_id, page, resultsInPage);
     }
 
     @Override
-    public List<Address> findAddressesByPostalCode(String postalcode) {
-        return addressDAO.findAddressesByPostalCode(postalcode);
+    public List<Address> findAddressesByPostalCode(String postalcode, int page, int resultsInPage) {
+        return addressDAO.findAddressesByPostalCode(postalcode, page, resultsInPage);
     }
 
     @Override
-    public List<Address> findAddressesByCountry(String country) {
-        return addressDAO.findAddressesByCountry(country);
+    public List<Address> findAddressesByCountry(String country, int page, int resultsInPage) {
+        return addressDAO.findAddressesByCountry(country, page, resultsInPage);
     }
 
     @Override
-    public List<Address> findAddressesByStreet(String street) {
-        return addressDAO.findAddressesByStreet(street);
+    public List<Address> findAddressesByStreet(String street, int page, int resultsInPage) {
+        return addressDAO.findAddressesByStreet(street, page, resultsInPage);
     }
 
     @Override
-    public List<Address> findAddressesByCity(String city) {
-        return addressDAO.findAddressesByCity(city);
+    public List<Address> findAddressesByCity(String city, int page, int resultsInPage) {
+        return addressDAO.findAddressesByCity(city, page, resultsInPage);
     }
 
     @Override

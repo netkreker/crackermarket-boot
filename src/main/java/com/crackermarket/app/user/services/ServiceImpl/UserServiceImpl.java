@@ -33,16 +33,16 @@ public class UserServiceImpl implements UserService {
         userDAO.updateUser(user);
     }
 
-    public List<User> findUsersByName(String name) {
-        return userDAO.findUsersByName(name);
+    public List<User> findUsersByName(String name, int page, int resultsInPage) {
+        return userDAO.findUsersByName(name, page, resultsInPage);
     }
 
-    public List<User> findAllUsers(){
-        return userDAO.findAllUsers();
+    public List<User> findAllUsers(int page, int resultsInPage){
+        return userDAO.findAllUsers(page, resultsInPage);
     }
 
-    public List<User> findUsersBySurname(String surname){
-       return userDAO.findUsersBySurname(surname);
+    public List<User> findUsersBySurname(String surname, int page, int resultsInPage){
+       return userDAO.findUsersBySurname(surname, page, resultsInPage);
     }
 
     public User findUserByUserName(String userName){
@@ -53,16 +53,16 @@ public class UserServiceImpl implements UserService {
         userDAO.deleteUser(user);
     }
 
-    public List<User> findUsersByEmail(String email){
-        return userDAO.findUsersByEmail(email);
+    public List<User> findUsersByEmail(String email, int page, int resultsInPage){
+        return userDAO.findUsersByEmail(email, page, resultsInPage);
     }
 
-    public List<User> findUsersByPhoneNumber(String phoneNumber){
-       return userDAO.findUsersByPhoneNumber(phoneNumber);
+    public List<User> findUsersByPhoneNumber(String phoneNumber, int page, int resultsInPage){
+       return userDAO.findUsersByPhoneNumber(phoneNumber, page, resultsInPage);
     }
 
-    public List<User> findCustomersByAddress(Address address){
-        return userDAO.findCustomersByAddress(address);
+    public List<User> findCustomersByAddress(Address address, int page, int resultsInPage){
+        return userDAO.findCustomersByAddress(address, page, resultsInPage);
     }
 
 

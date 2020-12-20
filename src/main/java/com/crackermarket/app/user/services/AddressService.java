@@ -11,12 +11,12 @@ public interface AddressService {
     Address findAddressById(UUID id);
     Address findAddressByUserName(String username);
 
-    List<Address> findAllAddresses();
-    List<Address> findAllUserAddresses(UUID user_id);
-    List<Address> findAddressesByPostalCode(String postalcode);
-    List<Address> findAddressesByCountry(String country);
-    List<Address> findAddressesByStreet(String street);
-    List<Address> findAddressesByCity(String city);
+    List<Address> findAllAddresses(int page, int resultsInPage);
+    List<Address> findAllUserAddresses(UUID user_id, int page, int resultsInPage);
+    List<Address> findAddressesByPostalCode(String postalcode, int page, int resultsInPage);
+    List<Address> findAddressesByCountry(String country, int page, int resultsInPage);
+    List<Address> findAddressesByStreet(String street, int page, int resultsInPage);
+    List<Address> findAddressesByCity(String city, int page, int resultsInPage);
 
     // Updating table
     void saveAddress(Address address);

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,54 +40,114 @@ public class AddressDAO {
     }
 
 
-    public List<Address> findAllAddresses(){
+    public List<Address> findAllAddresses(int page, int resultsInPage){
         List<Address> addresses = null;
         entityManager.getTransaction().begin();
-        addresses = entityManager.createQuery("SELECT a FROM Address a").getResultList();
+
+        Query query = entityManager.createQuery("SELECT a FROM Address a order by a.id");
+
+        if (query == null)
+            return null;
+
+        query.setFirstResult(page*resultsInPage);
+        query.setMaxResults(resultsInPage);
+
+        addresses = query.getResultList();
+
         entityManager.getTransaction().commit();
         return addresses;
     }
 
-    public List<Address> findAllUserAddresses(UUID user_id){
+    public List<Address> findAllUserAddresses(UUID user_id, int page, int resultsInPage){
         List<Address> addresses = null;
         entityManager.getTransaction().begin();
-        addresses = entityManager.createQuery("SELECT a FROM Address a WHERE a.user.id=: user_id").setParameter("user_id", user_id).getResultList();
+
+        Query query = entityManager.createQuery("SELECT a FROM Address a WHERE a.user.id=: user_id order by a.id").setParameter("user_id", user_id);
+
+        if (query == null)
+            return null;
+
+        query.setFirstResult(page*resultsInPage);
+        query.setMaxResults(resultsInPage);
+
+        addresses = query.getResultList();
+
         entityManager.getTransaction().commit();
         return addresses;
     }
 
-    public List<Address> findAddressesByPostalCode(String postalcode) {
+    public List<Address> findAddressesByPostalCode(String postalcode, int page, int resultsInPage) {
         List<Address> addresses = null;
         entityManager.getTransaction().begin();
-        addresses = entityManager.createQuery("SELECT a FROM Address a WHERE a.postalCode = :postalcode")
-                .setParameter("postalcode", postalcode).getResultList();
+
+        Query query = entityManager.createQuery("SELECT a FROM Address a WHERE a.postalCode = :postalcode order by a.id")
+                .setParameter("postalcode", postalcode);
+
+        if (query == null)
+            return null;
+
+        query.setFirstResult(page*resultsInPage);
+        query.setMaxResults(resultsInPage);
+
+        addresses = query.getResultList();
+
         entityManager.getTransaction().commit();
         return addresses;
     }
 
-    public List<Address> findAddressesByCountry(String country) {
+    public List<Address> findAddressesByCountry(String country, int page, int resultsInPage) {
         List<Address> addresses = null;
         entityManager.getTransaction().begin();
-        addresses = entityManager.createQuery("SELECT a FROM Address a WHERE a.country = :country")
-                .setParameter("country", country).getResultList();
+
+        Query query = entityManager.createQuery("SELECT a FROM Address a WHERE a.country = :country order by a.id")
+                .setParameter("country", country);
+
+        if (query == null)
+            return null;
+
+        query.setFirstResult(page*resultsInPage);
+        query.setMaxResults(resultsInPage);
+
+        addresses = query.getResultList();
+
         entityManager.getTransaction().commit();
         return addresses;
     }
 
-    public List<Address> findAddressesByStreet(String street) {
+    public List<Address> findAddressesByStreet(String street, int page, int resultsInPage) {
         List<Address> addresses = null;
         entityManager.getTransaction().begin();
-        addresses = entityManager.createQuery("SELECT a FROM Address a WHERE a.street = :street")
-                .setParameter("street", street).getResultList();
+
+        Query query = entityManager.createQuery("SELECT a FROM Address a WHERE a.street = :street order by a.id")
+                .setParameter("street", street);
+
+        if (query == null)
+            return null;
+
+        query.setFirstResult(page*resultsInPage);
+        query.setMaxResults(resultsInPage);
+
+        addresses = query.getResultList();
+
         entityManager.getTransaction().commit();
         return addresses;
     }
 
-    public List<Address> findAddressesByCity(String city) {
+    public List<Address> findAddressesByCity(String city, int page, int resultsInPage) {
         List<Address> addresses = null;
         entityManager.getTransaction().begin();
-        addresses = entityManager.createQuery("SELECT a FROM Address a WHERE a.city = :city")
-                .setParameter("city", city).getResultList();
+
+        Query query = entityManager.createQuery("SELECT a FROM Address a WHERE a.city = :city order by a.id")
+                .setParameter("city", city);
+
+        if (query == null)
+            return null;
+
+        query.setFirstResult(page*resultsInPage);
+        query.setMaxResults(resultsInPage);
+
+        addresses = query.getResultList();
+
         entityManager.getTransaction().commit();
         return addresses;
     }
@@ -94,8 +155,10 @@ public class AddressDAO {
     public Address findAddressByUserName(String username){
         List<Address> addresses = null;
         entityManager.getTransaction().begin();
+
         addresses = entityManager.createQuery("SELECT a FROM Address a WHERE a.user.userName = :username")
                 .setParameter("username", username).getResultList();
+
         entityManager.getTransaction().commit();
         return addresses.get(0);
     }

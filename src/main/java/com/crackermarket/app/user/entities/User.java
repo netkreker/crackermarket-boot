@@ -6,6 +6,7 @@ import com.crackermarket.app.shop.entities.Product;
 import com.crackermarket.app.user.enumerations.LevelAccess;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "ACCOUNT")
@@ -94,11 +95,31 @@ public class User extends BaseEntity {
     @Override
     public String toString() {
         return "User{" +
+                "id='" + getId() + '\'' +
+                "name='" + getName() + '\'' +
                 "userName='" + userName + '\'' +
                 ", surname='" + surname + '\'' +
                 ", email='" + email + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", access=" + access +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(userName, user.userName) &&
+                Objects.equals(password, user.password) &&
+                Objects.equals(surname, user.surname) &&
+                Objects.equals(email, user.email) &&
+                Objects.equals(phoneNumber, user.phoneNumber) &&
+                access == user.access;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userName, password, surname, email, phoneNumber, access);
     }
 }

@@ -6,6 +6,7 @@ import com.crackermarket.app.user.entities.User;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -72,5 +73,20 @@ public class Order extends BaseEntity {
                 "user=" + user +
                 ", total_price=" + total_price +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Order order = (Order) o;
+        return Objects.equals(total_price, order.total_price) &&
+                Objects.equals(user, order.user) &&
+                Objects.equals(products, order.products);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(total_price, user, products);
     }
 }
