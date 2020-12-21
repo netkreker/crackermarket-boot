@@ -2,6 +2,7 @@ package com.crackermarket.app.shop.restcontrollers;
 
 import com.crackermarket.app.shop.entities.Category;
 import com.crackermarket.app.shop.services.CategoryService;
+import com.crackermarket.app.user.entities.User;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
@@ -57,6 +58,8 @@ class CategoryRestControllerTest {
         Category childCategory = new Category();
         childCategory.setName("Child");
 
+
+        childCategory.setParentCategory(mainCategory);
 
         databaseService.save(mainCategory);
         databaseService.save(childCategory);
@@ -170,5 +173,16 @@ class CategoryRestControllerTest {
                         .content(testJson))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().json(testJson));
+    }
+
+    @Test
+    void deleteCategory() throws Exception {
+
+        Category testCategory = categoryService.findById(UUID.randomUUID().toString());
+
+        ResultActions resultActions = mockMvc.perform(
+                MockMvcRequestBuilders.delete("/category/delete/" + testCategory.getId())
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 }

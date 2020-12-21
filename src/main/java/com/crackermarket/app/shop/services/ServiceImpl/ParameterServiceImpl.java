@@ -29,8 +29,8 @@ public class ParameterServiceImpl implements ParameterService {
     }
 
     @Override
-    public Parameter findById(UUID id) {
-        return parameterDAO.findById(id);
+    public Parameter findById(String id) {
+        return parameterDAO.findById(UUID.fromString(id));
     }
 
     @Override
@@ -44,7 +44,12 @@ public class ParameterServiceImpl implements ParameterService {
     }
 
     @Override
-    public void delete(Parameter parameter) {
-        parameterDAO.delete(parameter);
+    public void delete(String id) {
+        parameterDAO.delete(parameterDAO.findById(UUID.fromString(id)));
+    }
+
+    @Override
+    public void update(Parameter parameter) {
+        parameterDAO.update(parameter);
     }
 }

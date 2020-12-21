@@ -1,21 +1,26 @@
 package com.crackermarket.app.shop.entities;
 
 import com.crackermarket.app.core.BaseEntity;
+import com.crackermarket.app.shop.repository.CategoryDAO;
+import com.crackermarket.app.shop.services.CategoryService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "CATEGORY")
 public class Category extends BaseEntity {
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "PARENT_CATEGORY")
     private Category parentCategory;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    private List<Parameter> parameters = new ArrayList<>();
+    @ManyToMany
+    private Set<Parameter> parameters = new HashSet<>();
 
     public void addParameter(Parameter parameter) {
         parameters.add(parameter);
@@ -25,11 +30,11 @@ public class Category extends BaseEntity {
         parameters.remove(parameter);
     }
 
-    public List<Parameter> getParameters() {
+    public Set<Parameter> getParameters() {
         return parameters;
     }
 
-    public void setParameter(List<Parameter> parameters) {
+    public void setParameters(Set<Parameter> parameters) {
         this.parameters = parameters;
     }
 
