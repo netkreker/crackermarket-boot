@@ -24,13 +24,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> findUserOrders(UUID user_id) {
-        return orderDAO.findUserOrders(user_id);
+    public List<Order> findUserOrders(UUID user_id, int page, int resultsInPage) {
+        return orderDAO.findUserOrders(user_id, page, resultsInPage);
     }
 
     @Override
-    public List<Order> findAllOrders() {
-        return orderDAO.findAllOrders();
+    public List<Order> findAllOrders(int page, int resultsInPage) {
+        return orderDAO.findAllOrders(page, resultsInPage);
     }
 
     @Override

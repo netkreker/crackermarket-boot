@@ -4,6 +4,7 @@ package com.crackermarket.app.user.entities;
 import com.crackermarket.app.core.BaseEntity;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "ADDRESS")
@@ -62,6 +63,23 @@ public class Address extends BaseEntity {
                 ", street='" + street + '\'' +
                 ", postalCode='" + postalCode + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Address address = (Address) o;
+        return Objects.equals(user, address.user) &&
+                Objects.equals(country, address.country) &&
+                Objects.equals(city, address.city) &&
+                Objects.equals(street, address.street) &&
+                Objects.equals(postalCode, address.postalCode);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(user, country, city, street, postalCode);
     }
 }
 

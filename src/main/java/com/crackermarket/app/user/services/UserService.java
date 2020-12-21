@@ -11,12 +11,12 @@ public interface UserService {
     // Search
     User findUserById(UUID id);
     User findUserByUserName(String userName);
-    List<User> findUsersByName(String name);
-    List<User> findAllUsers();
-    List<User> findUsersBySurname(String surname);
-    List<User> findUsersByEmail(String email);
-    List<User> findUsersByPhoneNumber(String phoneNumber);
-    List<User> findCustomersByAddress(Address address);
+    List<User> findUsersByName(String name, int page, int resultsInPage);
+    List<User> findAllUsers(int page, int resultsInPage);
+    List<User> findUsersBySurname(String surname, int page, int resultsInPage);
+    List<User> findUsersByEmail(String email, int page, int resultsInPage);
+    List<User> findUsersByPhoneNumber(String phoneNumber, int page, int resultsInPage);
+    List<User> findCustomersByAddress(Address address, int page, int resultsInPage);
 
     // Updating table
     void saveUser(User user);

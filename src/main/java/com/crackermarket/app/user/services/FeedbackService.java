@@ -10,9 +10,9 @@ public interface FeedbackService {
     // Search
     Feedback findFeedbackById(UUID id);
 
-    List<Feedback> findAllFeedbacks();
-    List<Feedback> findAllUserFeedbacks(UUID user_id);
-    List<Feedback> findAllProductFeedbacks(UUID product_id);
+    List<Feedback> findAllFeedbacks(int page, int resultsInPage);
+    List<Feedback> findAllUserFeedbacks(UUID user_id, int page, int resultsInPage);
+    List<Feedback> findAllProductFeedbacks(UUID product_id, int page, int resultsInPage);
 
     // Updating table
     void saveFeedback(Feedback feedback);

@@ -26,18 +26,18 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
-    public List<Feedback> findAllFeedbacks() {
-        return feedbackDAO.findAllFeedbacks();
+    public List<Feedback> findAllFeedbacks(int page, int resultsInPage) {
+        return feedbackDAO.findAllFeedbacks(page, resultsInPage);
     }
 
     @Override
-    public List<Feedback> findAllUserFeedbacks(UUID user_id) {
-        return feedbackDAO.findAllUserFeedbacks(user_id);
+    public List<Feedback> findAllUserFeedbacks(UUID user_id, int page, int resultsInPage) {
+        return feedbackDAO.findAllUserFeedbacks(user_id, page, resultsInPage);
     }
 
     @Override
-    public List<Feedback> findAllProductFeedbacks(UUID product_id) {
-        return feedbackDAO.findAllProductFeedbacks(product_id);
+    public List<Feedback> findAllProductFeedbacks(UUID product_id, int page, int resultsInPage) {
+        return feedbackDAO.findAllProductFeedbacks(product_id, page, resultsInPage);
     }
 
     @Override

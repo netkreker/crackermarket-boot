@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,27 +34,61 @@ public class UserDAO {
         entityManager.getTransaction().commit();
     }
 
-    public List<User> findUsersByName(String name) {
+    public List<User> findUsersByName(String name, int page, int resultsInPage) {
         List<User> users = null;
         entityManager.getTransaction().begin();
-        users = entityManager.createQuery("SELECT u FROM User u WHERE u.name = :name")
-                .setParameter("name", name).getResultList();
+        Query query = entityManager.createQuery("SELECT u FROM User u WHERE u.name = :name order by u.id").setParameter("name", name);
+
+        if (query == null)
+            return null;
+
+        query.setFirstResult(page*resultsInPage);
+        query.setMaxResults(resultsInPage);
+
+        users = query.getResultList();
         entityManager.getTransaction().commit();
         return users;
     }
 
-    public List<User> findAllUsers(){
+    /*public List<User> findAllUsers(){
         List<User> users = null;
         entityManager.getTransaction().begin();
         users = entityManager.createQuery("SELECT u FROM User u").getResultList();
         entityManager.getTransaction().commit();
         return users;
-    }
+    }*/
 
-    public List<User> findUsersBySurname(String surname){
+    public List<User> findAllUsers(int page, int resultsInPage){
         List<User> users = null;
         entityManager.getTransaction().begin();
-        users = entityManager.createQuery("SELECT u FROM User u WHERE u.surname =:surname").setParameter("surname", surname).getResultList();
+
+        Query query = entityManager.createQuery("SELECT u FROM User u ORDER BY u.id");
+
+        if (query == null)
+            return null;
+
+        query.setFirstResult(page*resultsInPage);
+        query.setMaxResults(resultsInPage);
+
+        users = query.getResultList(); //entityManager.createQuery("SELECT u FROM User u").getResultList();
+
+        entityManager.getTransaction().commit();
+        return users;
+    }
+
+    public List<User> findUsersBySurname(String surname, int page, int resultsInPage){
+        List<User> users = null;
+        entityManager.getTransaction().begin();
+
+        Query query = entityManager.createQuery("SELECT u FROM User u WHERE u.surname =:surname order by u.id").setParameter("surname", surname);
+
+        if (query == null)
+            return null;
+
+        query.setFirstResult(page*resultsInPage);
+        query.setMaxResults(resultsInPage);
+
+        users = query.getResultList();
         entityManager.getTransaction().commit();
         return users;
     }
@@ -71,26 +106,55 @@ public class UserDAO {
         entityManager.getTransaction().commit();
     }
 
-    public List<User> findUsersByEmail(String email){
+    public List<User> findUsersByEmail(String email, int page, int resultsInPage){
         List<User> users = null;
         entityManager.getTransaction().begin();
-        users = entityManager.createQuery("SELECT u FROM User u WHERE u.email =:email").setParameter("email", email).getResultList();
+        Query query =  entityManager.createQuery("SELECT u FROM User u WHERE u.email =:email").setParameter("email", email);
+
+        if (query == null)
+            return null;
+
+        query.setFirstResult(page*resultsInPage);
+        query.setMaxResults(resultsInPage);
+
+        users = query.getResultList();
+
         entityManager.getTransaction().commit();
         return users;
     }
 
-    public List<User> findUsersByPhoneNumber(String phoneNumber){
+    public List<User> findUsersByPhoneNumber(String phoneNumber, int page, int resultsInPage){
         List<User> users = null;
         entityManager.getTransaction().begin();
-        users = entityManager.createQuery("SELECT u FROM User u WHERE u.phoneNumber =:phonenumber").setParameter("phonenumber", phoneNumber).getResultList();
+
+        Query query =  entityManager.createQuery("SELECT u FROM User u WHERE u.phoneNumber =:phonenumber order by u.id").setParameter("phonenumber", phoneNumber);
+
+        if (query == null)
+            return null;
+
+        query.setFirstResult(page*resultsInPage);
+        query.setMaxResults(resultsInPage);
+
+        users = query.getResultList();
+
         entityManager.getTransaction().commit();
         return users;
     }
 
-    public List<User> findCustomersByAddress(Address address){
+    public List<User> findCustomersByAddress(Address address, int page, int resultsInPage){
         List<User> users = null;
         entityManager.getTransaction().begin();
-        users = entityManager.createQuery("SELECT u FROM User u WHERE id =:user_id").setParameter("user_id", address.getUser().getId()).getResultList();
+
+        Query query =  entityManager.createQuery("SELECT u FROM User u WHERE id =:user_id order by u.id").setParameter("user_id", address.getUser().getId());
+
+        if (query == null)
+            return null;
+
+        query.setFirstResult(page*resultsInPage);
+        query.setMaxResults(resultsInPage);
+
+        users = query.getResultList();
+
         entityManager.getTransaction().commit();
         return users;
     }

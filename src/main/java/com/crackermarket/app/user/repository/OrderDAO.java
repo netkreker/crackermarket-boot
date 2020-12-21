@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,10 +22,20 @@ public class OrderDAO {
         return order;
     }
 
-    public List<Order> findAllOrders(){
+    public List<Order> findAllOrders(int page, int resultsInPage){
         List<Order> orders = null;
         entityManager.getTransaction().begin();
-        orders = entityManager.createQuery("SELECT o FROM Order o").getResultList();
+
+        Query query = entityManager.createQuery("SELECT o FROM Order o order by o.id");
+
+        if (query == null)
+            return null;
+
+        query.setFirstResult(page*resultsInPage);
+        query.setMaxResults(resultsInPage);
+
+        orders = query.getResultList();
+
         entityManager.getTransaction().commit();
         return orders;
     }
@@ -47,10 +58,20 @@ public class OrderDAO {
         entityManager.getTransaction().commit();
     }
 
-    public List<Order> findUserOrders(UUID user_id){
+    public List<Order> findUserOrders(UUID user_id, int page, int resultsInPage){
         List<Order> orders = null;
         entityManager.getTransaction().begin();
-        orders = entityManager.createQuery("SELECT o FROM Order o WHERE o.user.id=: user_id").setParameter("user_id", user_id).getResultList();
+
+        Query query = entityManager.createQuery("SELECT o FROM Order o WHERE o.user.id=: user_id order by o.id").setParameter("user_id", user_id);
+
+        if (query == null)
+            return null;
+
+        query.setFirstResult(page*resultsInPage);
+        query.setMaxResults(resultsInPage);
+
+        orders = query.getResultList();
+
         entityManager.getTransaction().commit();
         return orders;
     }

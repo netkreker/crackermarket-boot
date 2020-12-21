@@ -21,6 +21,8 @@ import java.util.UUID;
 @RestController
 public class FeedbackRestController {
 
+    private static final int RESULTS_IN_PAGE = 3;
+
     @Autowired
     private FeedbackService feedbackService;
 
@@ -66,11 +68,11 @@ public class FeedbackRestController {
         return new ResponseEntity<>(feedback.getId(), HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/feedback/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getAllFeedbacks(){
+    @RequestMapping(value = "/feedback/all/{page}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAllFeedbacks(@PathVariable(name="page") String page){
 
         List<Feedback> feedbacks = null;
-        feedbacks = feedbackService.findAllFeedbacks();
+        feedbacks = feedbackService.findAllFeedbacks(Integer.parseInt(page), RESULTS_IN_PAGE);
 
         if (feedbacks == null || feedbacks.isEmpty()){
             LogEntity log = new LogEntity(LogEntityType.ERROR, this.getClass(), "getAllFeedbacks", HttpStatus.NO_CONTENT, "Feedbacks not found", null);
@@ -88,7 +90,7 @@ public class FeedbackRestController {
     }
 
     @RequestMapping(value = "/users/{id}/feedback/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> findUserFeedbacks(@PathVariable(name = "id") String id){
+    public ResponseEntity<?> findUserFeedbacks(@PathVariable(name = "id") String id, @PathVariable(name="page") String page){
 
         try{
             UUID.fromString(id);
@@ -109,7 +111,7 @@ public class FeedbackRestController {
         }
 
         List<Feedback> feedbacks = null;
-        feedbacks = feedbackService.findAllUserFeedbacks(UUID.fromString(id));
+        feedbacks = feedbackService.findAllUserFeedbacks(UUID.fromString(id), Integer.parseInt(page), RESULTS_IN_PAGE);
 
         if (feedbacks == null || feedbacks.isEmpty()){
             LogEntity log = new LogEntity(LogEntityType.ERROR, this.getClass(), "findUserFeedbacks", HttpStatus.NO_CONTENT, "Feedbacks for user with id \'" + id + "\'not found", null);

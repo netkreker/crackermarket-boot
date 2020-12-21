@@ -21,6 +21,8 @@ import java.util.UUID;
 @RequestMapping(value = "/users")
 public class SignUpUserRestController {
 
+    private static final int RESULTS_IN_PAGE = 3;
+
     @Autowired
     private UserService userService;
 
@@ -34,11 +36,11 @@ public class SignUpUserRestController {
     }
 
     // Getters
-    @RequestMapping(value = "/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> showAllUsers() {
+    @RequestMapping(value = "/all/{page}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> showAllUsers(@PathVariable(name = "page") String page) {
 
         List<User> users = null;
-        users = userService.findAllUsers();
+        users = userService.findAllUsers(Integer.parseInt(page),RESULTS_IN_PAGE);
 
         if (users == null || users.isEmpty()) {
             LogEntity log = new LogEntity(LogEntityType.ERROR, this.getClass(), "showAllUsers", HttpStatus.NO_CONTENT, "Users not found", null);

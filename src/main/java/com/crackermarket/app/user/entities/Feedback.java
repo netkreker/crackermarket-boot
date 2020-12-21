@@ -5,6 +5,7 @@ import com.crackermarket.app.user.enumerations.Rate;
 import com.crackermarket.app.shop.entities.Product;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "FEEDBACK")
@@ -82,5 +83,21 @@ public class Feedback extends BaseEntity {
                 ", user=" + user +
                 ", product=" + product +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Feedback feedback = (Feedback) o;
+        return rate == feedback.rate &&
+                Objects.equals(record, feedback.record) &&
+                Objects.equals(user, feedback.user) &&
+                Objects.equals(product, feedback.product);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(rate, record, user, product);
     }
 }

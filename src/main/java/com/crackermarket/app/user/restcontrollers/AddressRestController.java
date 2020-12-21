@@ -21,6 +21,8 @@ import java.util.UUID;
 @RestController
 public class AddressRestController {
 
+    private static final int RESULTS_IN_PAGE = 3;
+
     @Autowired
     private AddressService addressService;
 
@@ -63,7 +65,7 @@ public class AddressRestController {
 
         LogEntity log = new LogEntity(LogEntityType.INFO, this.getClass(), "createNewAddress", HttpStatus.CREATED, "Address with id \'" + address.getId() + "\' created", null);
         logService.save(log);
-        return new ResponseEntity<>(address.getId(), HttpStatus.CREATED);
+        return new ResponseEntity<>(address, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/users/{username}/address", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -81,14 +83,14 @@ public class AddressRestController {
 
         LogEntity log = new LogEntity(LogEntityType.INFO, this.getClass(), "findUserAddress", HttpStatus.FOUND, "Address by username \'" + username + "\' found", null);
         logService.save(log);
-        return new ResponseEntity<>(address.getId(), HttpStatus.FOUND);
+        return new ResponseEntity<>(address, HttpStatus.FOUND);
     }
 
-    @RequestMapping(value = "/address/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> findAllAddresses(){
+    @RequestMapping(value = "/address/all/{page}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> findAllAddresses(@PathVariable(name = "page") String page){
 
         List<Address> addresses = null;
-        addresses = addressService.findAllAddresses();
+        addresses = addressService.findAllAddresses(Integer.parseInt(page), RESULTS_IN_PAGE);
 
         if (addresses == null || addresses.isEmpty()){
             LogEntity log = new LogEntity(LogEntityType.ERROR, this.getClass(), "findAllAddresses", HttpStatus.NO_CONTENT, "Addresses not found", null);
@@ -96,15 +98,10 @@ public class AddressRestController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
-        List<UUID> addressesId = new ArrayList<>();
-
-        for (Address address: addresses)
-            addressesId.add(address.getId());
-
         LogEntity log = new LogEntity(LogEntityType.INFO, this.getClass(), "findAllAddresses", HttpStatus.FOUND, "Addresses found", null);
         logService.save(log);
 
-        return new ResponseEntity<>(addressesId, HttpStatus.FOUND);
+        return new ResponseEntity<>(addresses, HttpStatus.FOUND);
     }
 
     @RequestMapping(value = "/address/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -131,7 +128,7 @@ public class AddressRestController {
         LogEntity log = new LogEntity(LogEntityType.INFO, this.getClass(), "findAddressById", HttpStatus.FOUND, "Address with id \'" + id + "\' found", null);
         logService.save(log);
 
-        return new ResponseEntity<>(address.getId(), HttpStatus.FOUND);
+        return new ResponseEntity<>(address, HttpStatus.FOUND);
     }
 
     @RequestMapping(value = "/address/{id}/update", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -167,11 +164,12 @@ public class AddressRestController {
             return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
         }
 
+        address.setId(oldAddress.getId());
         addressService.updateAddress(address);
 
         LogEntity log = new LogEntity(LogEntityType.INFO, this.getClass(), "updateAddressById", HttpStatus.OK, "Address with id \'" + address.getId() + "\' modified", null);
         logService.save(log);
-        return new ResponseEntity<>(address.getId(), HttpStatus.OK);
+        return new ResponseEntity<>(address, HttpStatus.OK);
     }
 
 
@@ -200,7 +198,7 @@ public class AddressRestController {
 
         LogEntity log = new LogEntity(LogEntityType.INFO, this.getClass(), "deleteAddressById", HttpStatus.OK, "Address with id \'" + id + "\' deleted", null);
         logService.save(log);
-        return new ResponseEntity<>(address.getId(), HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 }
