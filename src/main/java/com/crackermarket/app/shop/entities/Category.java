@@ -4,6 +4,8 @@ import com.crackermarket.app.core.BaseEntity;
 import com.crackermarket.app.shop.repository.CategoryDAO;
 import com.crackermarket.app.shop.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,7 +17,8 @@ import java.util.Set;
 @Table(name = "CATEGORY")
 public class Category extends BaseEntity {
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+//            (cascade = CascadeType.MERGE)
     @JoinColumn(name = "PARENT_CATEGORY")
     private Category parentCategory;
 
@@ -44,6 +47,24 @@ public class Category extends BaseEntity {
 
     public void setParentCategory(Category parentCategory) {
         this.parentCategory = parentCategory;
+    }
+
+    public void copyParametersFromParentCategory(Category parentCategory) {
+        if(parentCategory != null) {
+            this.parameters.removeAll(parentCategory.getParameters());
+            this.parameters.addAll(parentCategory.getParameters());
+        }
+//            for(Parameter p : this.parameters) {
+//                for (Parameter p1 : parentCategory.parameters) {
+//                    if (p.getId().equals(p1.getId())) {
+//                        this.parameters.remove(p);
+//                    }
+//                }
+//            }
+//            for(Parameter p : parentCategory.parameters) {
+//                this.parameters.add(p);
+//            }
+
     }
 
     @Override

@@ -5,7 +5,9 @@ import com.crackermarket.app.shop.repository.CategoryDAO;
 import com.crackermarket.app.shop.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.SerializationUtils;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,7 +42,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<Category> findAll() {
-        return categoryDAO.findAll();
+        return null;
+    }
+
+    @Override
+    public List<Category> findAll(Integer i, Integer j) {
+        return categoryDAO.findAll(i, j);
     }
 
     @Override
@@ -50,6 +57,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void update(Category category) {
+        Category parent = findById(category.getParentCategory().getId().toString());
+        category.copyParametersFromParentCategory(parent);
         categoryDAO.update(category);
     }
 }

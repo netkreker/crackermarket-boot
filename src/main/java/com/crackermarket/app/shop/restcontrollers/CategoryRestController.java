@@ -28,9 +28,9 @@ public class CategoryRestController {
     Logger logger = Logger.getLogger(CategoryRestController.class);
 
     @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Category>> showAllCategories() {
-
-        List<Category> categories = categoryService.findAll();
+    public ResponseEntity<List<Category>> showAllCategories(@RequestParam(name = "page", required = false) Integer page,
+                                                            @RequestParam(name = "maxResult", required = false) Integer maxResult) {
+        List<Category> categories = categoryService.findAll(page, maxResult);
         if(categories.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
@@ -42,8 +42,14 @@ public class CategoryRestController {
     public ResponseEntity<?> createCategory(@RequestBody Category category) {
         HttpHeaders httpHeaders = new HttpHeaders();
         if(category.getName() != null && !"".equals(category.getName())) {
-            categoryService.save(category);
-            return new ResponseEntity<>(categoryService.findById(category.getId().toString()), httpHeaders, HttpStatus.CREATED);
+            if(categoryService.findByName(category.getName()).isEmpty()) {
+                categoryService.save(category);
+                return new ResponseEntity<>(categoryService.findById(category.getId().toString()), httpHeaders, HttpStatus.CREATED);
+            } else {
+                Map<String, String> errorMessage = new HashMap<>();
+                errorMessage.put("Error", "Category with name " + category.getName() + " already exists");
+                return new ResponseEntity<>(errorMessage, httpHeaders, HttpStatus.BAD_REQUEST);
+            }
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -58,6 +64,16 @@ public class CategoryRestController {
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @RequestMapping(value = "/find/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Category>> findCategoryByName(@PathVariable String name) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+
+        if(name != null) {
+            List<Category> categories = categoryService.findByName(name);
+            return new ResponseEntity<>(categories, httpHeaders,HttpStatus.FOUND);
+        } else return new ResponseEntity<>(httpHeaders, HttpStatus.BAD_REQUEST);
     }
 
 

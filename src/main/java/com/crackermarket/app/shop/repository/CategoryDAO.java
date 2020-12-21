@@ -28,15 +28,54 @@ public class CategoryDAO {
     public List<Category> findByName(String name) {
         List<Category> categories = null;
         entityManager.getTransaction().begin();
-        categories = entityManager.createQuery("SELECT c FROM Category c WHERE c.name = :name")
-                .setParameter("name", name).getResultList();
+        categories = entityManager.createQuery("SELECT c FROM Category c WHERE LOWER(c.name) LIKE :name")
+                .setParameter("name", "%" + name.toLowerCase() + "%").getResultList();
         entityManager.getTransaction().commit();
         return categories;
     }
-    public List<Category> findAll(){
-        List<Category> categories = null;
+
+    public List<Category> findByName(String name, Integer page, Integer resultsInPage) {
+        if(page == null || page < 0) {
+            page = 0;
+        }
+        if(resultsInPage == null || resultsInPage < 0) {
+            resultsInPage = 10;
+        }
+        List categories = null;
         entityManager.getTransaction().begin();
-        categories = entityManager.createQuery("SELECT c FROM Category c").getResultList();
+        categories = entityManager.createQuery("SELECT c FROM Category c WHERE LOWER(c.name) LIKE :name ORDER BY c.id")
+                .setParameter("name", "%" + name.toLowerCase() + "%")
+                .setFirstResult(page*resultsInPage)
+                .setMaxResults(resultsInPage)
+                .getResultList();
+        entityManager.getTransaction().commit();
+        return categories;
+    }
+
+
+    public List<Category> findAll(Integer page, Integer resultsInPage){
+        if(page == null || page < 0) {
+            page = 0;
+        }
+        if(resultsInPage == null || resultsInPage < 0) {
+            resultsInPage = 10;
+        }
+        List categories = null;
+        entityManager.getTransaction().begin();
+        categories = entityManager.createQuery("SELECT c FROM Category c ORDER BY c.name")
+                .setFirstResult(page*resultsInPage)
+                .setMaxResults(resultsInPage)
+                .getResultList();
+        entityManager.getTransaction().commit();
+        return categories;
+    }
+
+    public List<Category> findAll(){
+
+        List categories = null;
+        entityManager.getTransaction().begin();
+        categories = entityManager.createQuery("SELECT c FROM Category c ORDER BY c.name")
+                .getResultList();
         entityManager.getTransaction().commit();
         return categories;
     }
