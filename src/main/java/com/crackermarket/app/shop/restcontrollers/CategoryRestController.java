@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -28,6 +29,7 @@ public class CategoryRestController {
     Logger logger = Logger.getLogger(CategoryRestController.class);
 
     @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<List<Category>> showAllCategories(@RequestParam(name = "page", required = false) Integer page,
                                                             @RequestParam(name = "maxResult", required = false) Integer maxResult) {
         List<Category> categories = categoryService.findAll(page, maxResult);
@@ -39,6 +41,7 @@ public class CategoryRestController {
     }
 
     @RequestMapping(value = "/new", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<?> createCategory(@RequestBody Category category) {
         HttpHeaders httpHeaders = new HttpHeaders();
         if(category.getName() != null && !"".equals(category.getName())) {
@@ -56,6 +59,7 @@ public class CategoryRestController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<Category> findCategory(@PathVariable String id){
         HttpHeaders httpHeaders = new HttpHeaders();
         Category category = categoryService.findById(id);
@@ -67,6 +71,7 @@ public class CategoryRestController {
     }
 
     @RequestMapping(value = "/find/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<List<Category>> findCategoryByName(@PathVariable String name) {
         HttpHeaders httpHeaders = new HttpHeaders();
 
@@ -78,6 +83,7 @@ public class CategoryRestController {
 
 
     @RequestMapping(value = "/update", method = RequestMethod.PATCH, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<Category> updateCategory(@RequestBody Category category) {
         HttpHeaders httpHeaders = new HttpHeaders();
         if(category.getId() != null && category.getName() != null) {
@@ -90,6 +96,7 @@ public class CategoryRestController {
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<Category> deleteCategory(@PathVariable String id) {
         HttpHeaders httpHeaders = new HttpHeaders();
         if(id != null && !"".equals(id)) {

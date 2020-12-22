@@ -9,7 +9,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "ACCOUNT")
+@Table(name = "USERS")
 public class User extends BaseEntity {
 
     @Column(name = "USER_NAME")
@@ -27,11 +27,21 @@ public class User extends BaseEntity {
     @Column(name = "PHONE_NUMBER")
     private String phoneNumber;
 
-
+    @Column(name = "ROLE")
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @Column(name = "ACCESS_LEVEL")
     @Enumerated(EnumType.STRING)
     private LevelAccess access;
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
 
     public LevelAccess getAccess() {return access; }
 

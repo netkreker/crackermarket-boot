@@ -14,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class ParameterRestController {
     private ParameterService parameterService;
 
     @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<List<Parameter>> showAllParameters() {
 
         List<Parameter> parameters = parameterService.findAll();
@@ -36,6 +38,7 @@ public class ParameterRestController {
     }
 
     @RequestMapping(value = "/new", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<Parameter> createCategory(@RequestBody Parameter parameter) {
         HttpHeaders httpHeaders = new HttpHeaders();
         if(parameter.getName() != null && !"".equals(parameter.getName())) {
@@ -47,6 +50,7 @@ public class ParameterRestController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<Parameter> findParameter(@PathVariable String id){
         HttpHeaders httpHeaders = new HttpHeaders();
         Parameter parameter = parameterService.findById(id);
@@ -59,6 +63,7 @@ public class ParameterRestController {
 
 
     @RequestMapping(value = "/update", method = RequestMethod.PATCH, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<Parameter> updateParameter(@RequestBody Parameter parameter) {
         HttpHeaders httpHeaders = new HttpHeaders();
         if(parameter.getId() != null && parameter.getName() != null) {
@@ -70,6 +75,7 @@ public class ParameterRestController {
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<?> deleteParameter(@PathVariable String id) {
         HttpHeaders httpHeaders = new HttpHeaders();
         if(id != null && !"".equals(id)) {

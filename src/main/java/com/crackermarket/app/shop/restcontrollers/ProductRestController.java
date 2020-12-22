@@ -14,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -31,6 +32,7 @@ public class ProductRestController {
     Logger logger = Logger.getLogger(CategoryRestController.class);
 
     @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<List<Product>> showAllProducts() {
 
         List<Product> products = productService.findAll();
@@ -44,6 +46,7 @@ public class ProductRestController {
     }
 
     @RequestMapping(value = "/new", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<Product> createCategory(@RequestBody Product product) {
         HttpHeaders httpHeaders = new HttpHeaders();
         if(product.getName() != null && !"".equals(product.getName())) {
@@ -57,6 +60,7 @@ public class ProductRestController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<Product> findProduct(@PathVariable String id){
         HttpHeaders httpHeaders = new HttpHeaders();
         Product product = productService.findById(id);
@@ -70,6 +74,7 @@ public class ProductRestController {
 
 
     @RequestMapping(value = "/update", method = RequestMethod.PATCH, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<Product> updateCategory(@RequestBody Product product) {
         HttpHeaders httpHeaders = new HttpHeaders();
         if(product.getId() != null && product.getName() != null) {
@@ -82,6 +87,7 @@ public class ProductRestController {
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<?> deleteCategory(@PathVariable String id) {
         HttpHeaders httpHeaders = new HttpHeaders();
         if(id != null && !"".equals(id)) {
