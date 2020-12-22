@@ -42,7 +42,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<Category> findAll() {
-        return null;
+        return categoryDAO.findAll();
     }
 
     @Override
@@ -57,8 +57,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void update(Category category) {
-        Category parent = findById(category.getParentCategory().getId().toString());
-        category.copyParametersFromParentCategory(parent);
+        if(category.getParentCategory() != null && category.getParentCategory().getId() != null) {
+            Category parent = findById(category.getParentCategory().getId().toString());
+            category.copyParametersFromParentCategory(parent);
+        }
         categoryDAO.update(category);
     }
 }

@@ -42,6 +42,10 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> findAll() {
         return productDAO.findAll();
     }
+    @Override
+    public List<Product> findAll(Integer i, Integer j) {
+        return productDAO.findAll(i, j);
+    }
 
     @Override
     public void delete(String id) {

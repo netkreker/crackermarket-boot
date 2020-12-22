@@ -28,7 +28,7 @@ public class ProductDAO {
     }
 
     public List<Product> findByName(String name) {
-        List<Product> products = null;
+        List products = null;
         entityManager.getTransaction().begin();
         products = entityManager.createQuery("SELECT p FROM Product p WHERE p.name = :name")
                 .setParameter("name", name).getResultList();
@@ -39,6 +39,24 @@ public class ProductDAO {
         List<Product> products = null;
         entityManager.getTransaction().begin();
         products = entityManager.createQuery("SELECT p FROM Product p").getResultList();
+        entityManager.getTransaction().commit();
+        return products;
+    }
+
+    public List<Product> findAll(Integer page, Integer resultsInPage) {
+        if (page == null || page < 0) {
+            page = 0;
+        }
+        if (resultsInPage == null || resultsInPage < 0) {
+            resultsInPage = 10;
+        }
+
+        List products = null;
+        entityManager.getTransaction().begin();
+        products = entityManager.createQuery("SELECT p FROM Product p ORDER BY p.name")
+                .setFirstResult(page*resultsInPage)
+                .setMaxResults(resultsInPage)
+                .getResultList();
         entityManager.getTransaction().commit();
         return products;
     }

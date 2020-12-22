@@ -90,7 +90,6 @@ public class CategoryRestController {
             categoryService.update(category);
             return new ResponseEntity<>(category, httpHeaders, HttpStatus.OK);
         } else {
-            logger.error(HttpStatus.BAD_REQUEST);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

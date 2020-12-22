@@ -33,9 +33,10 @@ public class ProductRestController {
 
     @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('read')")
-    public ResponseEntity<List<Product>> showAllProducts() {
+    public ResponseEntity<List<Product>> showAllProducts(@RequestParam(name = "page", required = false) Integer page,
+                                                         @RequestParam(name = "maxResult", required = false) Integer maxResult) {
 
-        List<Product> products = productService.findAll();
+        List<Product> products = productService.findAll(page, maxResult);
         if(products.isEmpty()) {
             LogEntity log = new LogEntity(LogEntityType.ERROR, this.getClass(), "showAllProducts", HttpStatus.NO_CONTENT, "Products not found", null);
             logService.save(log);

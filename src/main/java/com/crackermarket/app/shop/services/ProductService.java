@@ -2,14 +2,16 @@ package com.crackermarket.app.shop.services;
 
 import com.crackermarket.app.shop.entities.Product;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 import java.util.UUID;
 
 public interface ProductService {
-    public void save(Product product);
-    public Product findById(String id);
-    public List<Product> findByName(String name);
-    public List<Product> findAll();
-    public void delete(String id);
-    public void update(Product product);
+    void save(Product product);
+    Product findById(String id);
+    List<Product> findByName(String name);
+    List<Product> findAll();
+    List<Product> findAll(Integer i, Integer j);
+    void delete(String id);
+    void update(Product product);
 }
