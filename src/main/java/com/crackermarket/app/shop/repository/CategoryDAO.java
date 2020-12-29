@@ -14,24 +14,44 @@ public class CategoryDAO {
     private EntityManager entityManager;
 
     public Category findById(UUID id) {
-        entityManager.getTransaction().begin();
-        Category category = entityManager.find(Category.class, id);
-        entityManager.getTransaction().commit();
-        return category;
+        try{
+            entityManager.getTransaction().begin();
+            Category category = entityManager.find(Category.class, id);
+            entityManager.getTransaction().commit();
+            return category;
+        } finally {
+            if(entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+        }
     }
+
     public void save(Category category) {
-        entityManager.getTransaction().begin();
-        entityManager.persist(category);
-        entityManager.getTransaction().commit();
+        try{
+            entityManager.getTransaction().begin();
+            entityManager.persist(category);
+            entityManager.getTransaction().commit();
+        } finally {
+            if(entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+        }
     }
 
     public List<Category> findByName(String name) {
-        List<Category> categories = null;
-        entityManager.getTransaction().begin();
-        categories = entityManager.createQuery("SELECT c FROM Category c WHERE LOWER(c.name) LIKE :name")
-                .setParameter("name", "%" + name.toLowerCase() + "%").getResultList();
-        entityManager.getTransaction().commit();
-        return categories;
+        try{
+            List categories = null;
+            entityManager.getTransaction().begin();
+            categories = entityManager.createQuery("SELECT c FROM Category c WHERE LOWER(c.name) LIKE :name")
+                    .setParameter("name", "%" + name.toLowerCase() + "%").getResultList();
+            entityManager.getTransaction().commit();
+            return categories;
+        } finally {
+            if(entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+        }
+
     }
 
     public List<Category> findByName(String name, Integer page, Integer resultsInPage) {
@@ -42,14 +62,22 @@ public class CategoryDAO {
             resultsInPage = 10;
         }
         List categories = null;
-        entityManager.getTransaction().begin();
-        categories = entityManager.createQuery("SELECT c FROM Category c WHERE LOWER(c.name) LIKE :name ORDER BY c.id")
-                .setParameter("name", "%" + name.toLowerCase() + "%")
-                .setFirstResult(page*resultsInPage)
-                .setMaxResults(resultsInPage)
-                .getResultList();
-        entityManager.getTransaction().commit();
-        return categories;
+
+        try{
+            entityManager.getTransaction().begin();
+            categories = entityManager.createQuery("SELECT c FROM Category c WHERE LOWER(c.name) LIKE :name ORDER BY c.id")
+                    .setParameter("name", "%" + name.toLowerCase() + "%")
+                    .setFirstResult(page*resultsInPage)
+                    .setMaxResults(resultsInPage)
+                    .getResultList();
+            entityManager.getTransaction().commit();
+            return categories;
+        } finally {
+            if(entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+        }
+
     }
 
 
@@ -61,34 +89,62 @@ public class CategoryDAO {
             resultsInPage = 10;
         }
         List categories = null;
-        entityManager.getTransaction().begin();
-        categories = entityManager.createQuery("SELECT c FROM Category c ORDER BY c.name")
-                .setFirstResult(page*resultsInPage)
-                .setMaxResults(resultsInPage)
-                .getResultList();
-        entityManager.getTransaction().commit();
-        return categories;
+
+        try{
+            entityManager.getTransaction().begin();
+            categories = entityManager.createQuery("SELECT c FROM Category c ORDER BY c.name")
+                    .setFirstResult(page*resultsInPage)
+                    .setMaxResults(resultsInPage)
+                    .getResultList();
+            entityManager.getTransaction().commit();
+            return categories;
+        } finally {
+            if(entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+        }
+
     }
 
     public List<Category> findAll(){
-
         List categories = null;
-        entityManager.getTransaction().begin();
-        categories = entityManager.createQuery("SELECT c FROM Category c ORDER BY c.name")
-                .getResultList();
-        entityManager.getTransaction().commit();
-        return categories;
+
+        try {
+            entityManager.getTransaction().begin();
+            categories = entityManager.createQuery("SELECT c FROM Category c ORDER BY c.name")
+                    .getResultList();
+            entityManager.getTransaction().commit();
+            return categories;
+        } finally {
+            if(entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+        }
+
     }
 
     public void update(Category category) {
-        entityManager.getTransaction().begin();
-        entityManager.merge(category);
-        entityManager.getTransaction().commit();
+        try{
+            entityManager.getTransaction().begin();
+            entityManager.merge(category);
+            entityManager.getTransaction().commit();
+        } finally {
+            if(entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+        }
     }
 
     public void delete(Category category) {
-        entityManager.getTransaction().begin();
-        entityManager.remove(category);
-        entityManager.getTransaction().commit();
+        try{
+            entityManager.getTransaction().begin();
+            entityManager.remove(category);
+            entityManager.getTransaction().commit();
+        } finally {
+            if(entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+        }
+
     }
 }

@@ -6,7 +6,7 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Hello page</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/style.css}" />
+<!--    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/style.css}" />-->
 </head>
 <body>
 
@@ -25,6 +25,18 @@
     <tr>
         <td>
             <a href="/users/new"><button>Register User</button></a>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="/auth/login"><button>Login</button></a>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <form action="/auth/logout" method="POST">
+                <button type="submit">Logout</button>
+            </form>
         </td>
     </tr>
 </table>

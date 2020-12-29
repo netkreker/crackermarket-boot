@@ -28,7 +28,7 @@ public class ParameterValueDAO {
     }
 
     public List<ParameterValue> findByName(String name) {
-        List<ParameterValue> parameterValues = null;
+        List parameterValues = null;
         entityManager.getTransaction().begin();
         parameterValues = entityManager.createQuery("SELECT pv FROM ParameterValue pv WHERE pv.name = :name")
                 .setParameter("name", name).getResultList();
@@ -36,7 +36,7 @@ public class ParameterValueDAO {
         return parameterValues;
     }
     public List<ParameterValue> findAll(){
-        List<ParameterValue> parameterValues = null;
+        List parameterValues = null;
         entityManager.getTransaction().begin();
         parameterValues = entityManager.createQuery("SELECT pv FROM ParameterValue pv").getResultList();
         entityManager.getTransaction().commit();
