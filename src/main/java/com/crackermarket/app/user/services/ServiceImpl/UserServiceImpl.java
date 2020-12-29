@@ -1,10 +1,13 @@
 package com.crackermarket.app.user.services.ServiceImpl;
 
+import com.crackermarket.app.core.Status;
+import com.crackermarket.app.user.entities.Role;
 import com.crackermarket.app.user.repository.UserDAO;
 import com.crackermarket.app.user.services.UserService;
 import com.crackermarket.app.user.entities.Address;
 import com.crackermarket.app.user.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,10 +17,12 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     private UserDAO userDAO;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserDAO userDAO) {
+    public UserServiceImpl(UserDAO userDAO, PasswordEncoder passwordEncoder) {
         this.userDAO = userDAO;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public UserServiceImpl() { }
@@ -26,6 +31,9 @@ public class UserServiceImpl implements UserService {
        return userDAO.findUserById(id);
     }
     public void saveUser(User user) {
+        user.setRole(Role.USER);
+        user.setStatus(Status.ACTIVE);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDAO.saveUser(user);
     }
 

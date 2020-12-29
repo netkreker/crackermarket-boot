@@ -85,7 +85,7 @@ public class SignUpUserRestController {
 
         LogEntity log = new LogEntity(LogEntityType.INFO, this.getClass(), "createUser", HttpStatus.CREATED, "User with id \'"
                 + user.getId() + "\' was created", null);
-        logService.save(log);
+//        logService.save(log);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
