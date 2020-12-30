@@ -32,6 +32,9 @@ build/
 ### VS Code ###
 .vscode/
 
-.idea
 target
 git
+!/src/main/resources/META-INF/persistence.xml
+!/src/main/resources/application.properties
+!/src/main/java/com/crackermarket/app/CrackermarketApplication.java
+!/src/main/java/com/crackermarket/app/ServletInitializer.java
