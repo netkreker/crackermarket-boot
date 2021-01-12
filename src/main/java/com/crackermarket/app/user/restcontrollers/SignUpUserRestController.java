@@ -7,15 +7,14 @@ import com.crackermarket.app.core.LogEntity;
 import com.crackermarket.app.user.services.UserService;
 import com.crackermarket.app.user.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -74,6 +73,9 @@ public class SignUpUserRestController {
     @ResponseBody
     @RequestMapping(value = "/register", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createUser(@RequestBody User user){
+        Map <String, String> errorMessage = new HashMap<>();
+        String error = "Error";
+        String message;
 
         if (user == null) {
             LogEntity log = new LogEntity(LogEntityType.ERROR, this.getClass(), "createUser", HttpStatus.BAD_REQUEST, "User not created", null);
@@ -81,11 +83,14 @@ public class SignUpUserRestController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        userService.saveUser(user);
+        if(userService.findUserByUserName(user.getUserName()) != null) {
+            message = "User with username " + user.getUserName() + " is already exists";
+            errorMessage.put(error, message);
+            return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+        }
 
-        LogEntity log = new LogEntity(LogEntityType.INFO, this.getClass(), "createUser", HttpStatus.CREATED, "User with id \'"
-                + user.getId() + "\' was created", null);
-//        logService.save(log);
+
+        userService.saveUser(user);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 

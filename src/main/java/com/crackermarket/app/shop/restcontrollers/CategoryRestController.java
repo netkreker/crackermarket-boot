@@ -43,15 +43,14 @@ public class CategoryRestController {
     @RequestMapping(value = "/new", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<?> createCategory(@RequestBody Category category) {
-        HttpHeaders httpHeaders = new HttpHeaders();
         if(category.getName() != null && !"".equals(category.getName())) {
             if(categoryService.findByName(category.getName()).isEmpty()) {
                 categoryService.save(category);
-                return new ResponseEntity<>(categoryService.findById(category.getId().toString()), httpHeaders, HttpStatus.CREATED);
+                return new ResponseEntity<>(categoryService.findById(category.getId().toString()), new HttpHeaders(), HttpStatus.CREATED);
             } else {
                 Map<String, String> errorMessage = new HashMap<>();
                 errorMessage.put("Error", "Category with name " + category.getName() + " already exists");
-                return new ResponseEntity<>(errorMessage, httpHeaders, HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.BAD_REQUEST);
             }
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -61,10 +60,9 @@ public class CategoryRestController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<Category> findCategory(@PathVariable String id){
-        HttpHeaders httpHeaders = new HttpHeaders();
         Category category = categoryService.findById(id);
         if(category != null) {
-            return new ResponseEntity<>(category, httpHeaders,HttpStatus.FOUND);
+            return new ResponseEntity<>(category, new HttpHeaders(),HttpStatus.FOUND);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -73,22 +71,20 @@ public class CategoryRestController {
     @RequestMapping(value = "/find/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<List<Category>> findCategoryByName(@PathVariable String name) {
-        HttpHeaders httpHeaders = new HttpHeaders();
 
         if(name != null) {
             List<Category> categories = categoryService.findByName(name);
-            return new ResponseEntity<>(categories, httpHeaders,HttpStatus.FOUND);
-        } else return new ResponseEntity<>(httpHeaders, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(categories, new HttpHeaders(),HttpStatus.FOUND);
+        } else return new ResponseEntity<>(new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
 
     @RequestMapping(value = "/update", method = RequestMethod.PATCH, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<Category> updateCategory(@RequestBody Category category) {
-        HttpHeaders httpHeaders = new HttpHeaders();
         if(category.getId() != null && category.getName() != null) {
             categoryService.update(category);
-            return new ResponseEntity<>(category, httpHeaders, HttpStatus.OK);
+            return new ResponseEntity<>(category, new HttpHeaders(), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -97,10 +93,9 @@ public class CategoryRestController {
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<Category> deleteCategory(@PathVariable String id) {
-        HttpHeaders httpHeaders = new HttpHeaders();
         if(id != null && !"".equals(id)) {
             categoryService.delete(id);
-            return new ResponseEntity<>(httpHeaders, HttpStatus.OK);
+            return new ResponseEntity<>(new HttpHeaders(), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
