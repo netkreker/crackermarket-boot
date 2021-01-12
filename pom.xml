@@ -11,7 +11,7 @@
 	<groupId>com.crackermarket</groupId>
 	<artifactId>crackermarket</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>crackermarket</name>
 	<description>Crackermarket</description>
 
@@ -109,6 +109,7 @@
                 </configuration>
             </plugin>
         </plugins>
+		<finalName>docker-spring-boot</finalName>
 	</build>
 
 </project>

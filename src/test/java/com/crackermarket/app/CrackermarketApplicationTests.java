@@ -12,36 +12,36 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+//@SpringBootTest
+//@AutoConfigureMockMvc
 public class CrackermarketApplicationTests {
-
-	@Autowired
-	public MockMvc mockMvc;
-	@Autowired
-	private CategoryDAO categoryDAO;
-	@Test
-	public void loadEmptyCategory() throws Exception{
-		mockMvc
-				.perform(get("/category"))
-				.andDo(print())
-				.andExpect(status().isNoContent());
-	}
-
-	@Test
-	public void loadAllCategories() throws Exception {
-		saveNewCategory();
-		mockMvc
-				.perform(get("/category"))
-				.andDo(print())
-				.andExpect(status().isFound());
-	}
-
-	public void saveNewCategory() throws Exception {
-		Category category = new Category();
-		category.setName("Main category");
-
-		categoryDAO.save(category);
-
-	}
+//
+//	@Autowired
+//	public MockMvc mockMvc;
+//	@Autowired
+//	private CategoryDAO categoryDAO;
+//	@Test
+//	public void loadEmptyCategory() throws Exception{
+//		mockMvc
+//				.perform(get("/category"))
+//				.andDo(print())
+//				.andExpect(status().isNoContent());
+//	}
+//
+//	@Test
+//	public void loadAllCategories() throws Exception {
+//		saveNewCategory();
+//		mockMvc
+//				.perform(get("/category"))
+//				.andDo(print())
+//				.andExpect(status().isFound());
+//	}
+//
+//	public void saveNewCategory() throws Exception {
+//		Category category = new Category();
+//		category.setName("Main category");
+//
+//		categoryDAO.save(category);
+//
+//	}
 }
